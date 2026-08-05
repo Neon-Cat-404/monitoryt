@@ -1,5 +1,5 @@
 const API_KEY = "AIzaSyAEhIgZdOT3oygqDjok801P_8T3awYvyHc";
-const CHANNEL_NAME = "@MrBeast"; // Change this
+const CHANNEL_NAME = "@ThinkSchool"; // Change this
 
 async function getChannelId(name) {
     // Remove @ if present
@@ -32,7 +32,7 @@ async function getUploadsPlaylist(channelId) {
     return data.items[0].contentDetails.relatedPlaylists.uploads;
 }
 
-async function getLatestVideos(playlistId, maxResults = 5) {
+async function getLatestVideos(playlistId, maxResults) {
     const url =
         `https://www.googleapis.com/youtube/v3/playlistItems` +
         `?part=snippet` +
@@ -61,7 +61,7 @@ async function main() {
         const uploadsPlaylist = await getUploadsPlaylist(channelId);
         console.log("Uploads Playlist:", uploadsPlaylist);
 
-        const videos = await getLatestVideos(uploadsPlaylist, 10);
+        const videos = await getLatestVideos(uploadsPlaylist, 20);
 
         console.log("\nLatest Videos\n");
 
