@@ -26,6 +26,7 @@ export default function Page() {
       );
 
       const data = await res.json();
+      console.log(data);
       setVideos(data);
     } catch (e) {
       console.error(e);

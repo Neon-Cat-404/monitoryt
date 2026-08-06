@@ -24,17 +24,17 @@ async function uploadThumbnail(videoId: string, ytUrl: string) {
 
     // Check if already exists
     try {
-        await r2.send(
-            new HeadObjectCommand({
-                Bucket: BUCKET,
-                Key: key,
-            })
-        );
+    await r2.send(
+        new HeadObjectCommand({
+            Bucket: BUCKET,
+            Key: key,
+        })
+    );
 
-        return `${PUBLIC_URL}/${key}`;
-    } catch {
-        // Doesn't exist, continue to upload
-    }
+    console.log("Object exists");
+} catch (e) {
+    console.error("HEAD ERROR:", e);
+}
 
     // Download thumbnail from YouTube
     const res = await fetch(ytUrl);
@@ -44,6 +44,8 @@ async function uploadThumbnail(videoId: string, ytUrl: string) {
     }
 
     const buffer = Buffer.from(await res.arrayBuffer());
+
+    try{
 
     // Upload to R2
     await r2.send(
@@ -55,7 +57,8 @@ async function uploadThumbnail(videoId: string, ytUrl: string) {
             CacheControl: "public, max-age=31536000, immutable",
         })
     );
-
+    console.log("Uploaded");
+} catch(e) {console.error("UPLOAD ERROR:", e);}
     return `${PUBLIC_URL}/${key}`;
 }
 
