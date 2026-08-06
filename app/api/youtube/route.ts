@@ -1,6 +1,63 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import {
+    S3Client,
+    HeadObjectCommand,
+    PutObjectCommand,
+} from "@aws-sdk/client-s3";
+
 const API_KEY = process.env.YOUTUBE_API_KEY!;
+const r2 = new S3Client({
+    region: "auto",
+    endpoint: process.env.R2_ENDPOINT!,
+    credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+    },
+});
+
+const BUCKET = process.env.R2_BUCKET!;
+const PUBLIC_URL = process.env.R2_PUBLIC_URL!;
+
+async function uploadThumbnail(videoId: string, ytUrl: string) {
+    const key = `youtube/${videoId}.jpg`;
+
+    // Check if already exists
+    try {
+        await r2.send(
+            new HeadObjectCommand({
+                Bucket: BUCKET,
+                Key: key,
+            })
+        );
+
+        return `${PUBLIC_URL}/${key}`;
+    } catch {
+        // Doesn't exist, continue to upload
+    }
+
+    // Download thumbnail from YouTube
+    const res = await fetch(ytUrl);
+
+    if (!res.ok) {
+        throw new Error("Failed to download thumbnail");
+    }
+
+    const buffer = Buffer.from(await res.arrayBuffer());
+
+    // Upload to R2
+    await r2.send(
+        new PutObjectCommand({
+            Bucket: BUCKET,
+            Key: key,
+            Body: buffer,
+            ContentType: res.headers.get("content-type") ?? "image/jpeg",
+            CacheControl: "public, max-age=31536000, immutable",
+        })
+    );
+
+    return `${PUBLIC_URL}/${key}`;
+}
 
 async function getChannelId(username: string) {
     const query = username.replace("@", "");
@@ -35,16 +92,27 @@ async function getLatestVideos(playlistId: string, maxResults = 20) {
 
     const data = await res.json();
 
-    return data.items.map((item: any) => ({
-        title: item.snippet.title,
-        thumbnail:
-            item.snippet.thumbnails.maxres?.url ||
-            item.snippet.thumbnails.high?.url ||
-            item.snippet.thumbnails.medium?.url ||
-            item.snippet.thumbnails.default?.url,
-        publishedAt: item.snippet.publishedAt,
-        videoId: item.snippet.resourceId.videoId,
-    }));
+    return await Promise.all(
+        data.items.map(async (item: any) => {
+            const thumbnailUrl =
+                item.snippet.thumbnails.maxres?.url ||
+                item.snippet.thumbnails.high?.url ||
+                item.snippet.thumbnails.medium?.url ||
+                item.snippet.thumbnails.default?.url;
+
+            const thumbnail = await uploadThumbnail(
+                item.snippet.resourceId.videoId,
+                thumbnailUrl
+            );
+
+            return {
+                title: item.snippet.title,
+                thumbnail,
+                publishedAt: item.snippet.publishedAt,
+                videoId: item.snippet.resourceId.videoId,
+            };
+        })
+    );
 }
 
 function formatDuration(duration: string) {
