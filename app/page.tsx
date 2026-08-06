@@ -61,9 +61,12 @@ export default function Page() {
           <h2 className="text-[#ffffff90] font-bold text-xl">Recommended</h2>
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 mt-2 text-semibold">
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@ThinkSchool")}>@ThinkSchool</div>
+            <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@ThinkSchool_Hindi")}>@ThinkSchool_Hindi</div>
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@Backstagewithmillionaires")}>@Backstagewithmillionaires</div>
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@Vaibhavsisnity")}>@Vaibhavsisnity</div>
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@Varunmayya")}>@Varunmayya</div>
+            <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@ByAnuragBansal")}>@ByAnuragBansal</div>
+            <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@BuildersCentral")}>@BuildersCentral</div>
           </div>
         </div>
 
