@@ -67,6 +67,9 @@ export default function Page() {
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@Varunmayya")}>@Varunmayya</div>
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@ByAnuragBansal")}>@ByAnuragBansal</div>
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@BuildersCentral")}>@BuildersCentral</div>
+            <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@getsetfly")}>@getsetfly</div>
+            <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@GauravThakur-GSF")}>@GauravThakur-GSF</div>
+            <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@Breakdownbyaeos")}>@Breakdown</div>
           </div>
         </div>
 
@@ -160,14 +163,6 @@ export default function Page() {
                     >
                       📋 Copy
                     </button>
-
-                    <a
-                      href={video.url}
-                      target="_blank"
-                      className="flex-1 text-center rounded-xl bg-red-600 hover:bg-red-500 py-3 font-semibold"
-                    >
-                      ▶ Watch
-                    </a>
 
                   </div>
 
