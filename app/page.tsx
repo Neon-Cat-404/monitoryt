@@ -41,6 +41,26 @@ export default function Page() {
     alert("Copied!");
   }
 
+  async function datesearch() {
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        `/api/date`
+      );
+
+      const data = await res.json();
+      console.log(data);
+      setVideos(data);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to fetch videos.");
+    }
+
+    setLoading(false);
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-black text-white">
       <div className="max-w-7xl mx-auto px-6 py-14">
@@ -70,6 +90,7 @@ export default function Page() {
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@getsetfly")}>@getsetfly</div>
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@GauravThakur-GSF")}>@GauravThakur-GSF</div>
             <div className="rounded-3xl bg-zinc-900 px-3 py-4 overflow-hidden cursor-pointer" onClick={() => setChannel("@Breakdownbyaeos")}>@Breakdown</div>
+            <div className="rounded-3xl bg-pink-900 px-3 py-4 overflow-hidden cursor-pointer font-bold" onClick={() => datesearch()}>Today's Videos</div>
           </div>
         </div>
 
